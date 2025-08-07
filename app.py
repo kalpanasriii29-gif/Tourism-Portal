@@ -2,10 +2,13 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for, f
 import sqlite3
 import datetime
 import requests
+import os
+import sys
 from functools import wraps
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here'  # Change this in production
+# Use environment variable for secret key in production, fallback for development
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 
 # Database initialization
 def init_db():
@@ -200,5 +203,20 @@ def admin_dashboard():
     return render_template('admin_dashboard.html', waterfalls=waterfalls)
 
 if __name__ == '__main__':
+    # Handle command line arguments
+    if len(sys.argv) > 1 and sys.argv[1] == '--init-db':
+        print("Initializing database...")
+        init_db()
+        print("Database initialized successfully!")
+        sys.exit(0)
+    
+    # Initialize database on startup
     init_db()
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    
+    # Get port from environment variable (Render sets this automatically)
+    port = int(os.environ.get('PORT', 5000))
+    
+    # Run in production mode on Render, development mode locally
+    debug_mode = os.environ.get('RENDER') is None
+    
+    app.run(debug=debug_mode, host='0.0.0.0', port=port)

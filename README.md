@@ -148,19 +148,36 @@ CREATE TABLE emergency_contacts (
 ## 🌐 Deployment Options
 
 ### Local Development
-- Run with `python app.py`
+- Run with `python3 app.py`
 - Access at `http://localhost:5000`
 
-### Cloud Deployment
-**Recommended platforms:**
-- **Render**: Easy Python app deployment
-- **Railway**: Simple Flask hosting
-- **Heroku**: Popular cloud platform
-- **Replit**: Browser-based development and hosting
+### 🚀 Render Deployment (Recommended)
+This project is optimized for **Render.com** deployment:
 
-**For static frontend only:**
-- **Vercel**: Great for frontend deployment
-- **Netlify**: Easy static site hosting
+1. **Quick Deploy**: Push to GitHub and deploy in minutes
+2. **Free Tier Available**: Perfect for testing and small projects
+3. **Auto-scaling**: Handles traffic automatically
+4. **HTTPS Included**: Secure by default
+
+**📋 Render Deployment Files Included:**
+- `requirements.txt` - Python dependencies with gunicorn
+- `build.sh` - Automated build script
+- `Procfile` - Process configuration
+- `render.yaml` - Infrastructure as code (optional)
+- `RENDER_DEPLOYMENT.md` - Complete deployment guide
+
+**🔗 Quick Start:**
+1. Push code to GitHub
+2. Connect repository to Render
+3. Deploy with one click
+4. Access your live chatbot!
+
+**📖 Detailed Instructions:** See `RENDER_DEPLOYMENT.md`
+
+### Other Cloud Platforms
+- **Railway**: Simple Flask hosting
+- **Heroku**: Popular cloud platform  
+- **Replit**: Browser-based development and hosting
 
 ## 🛠️ Technologies Used
 
