@@ -8,7 +8,7 @@ from functools import wraps
 
 app = Flask(__name__)
 # Use environment variable for secret key in production, fallback for development
-app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
+app.secret_key = os.environ.get('SECRET_KEY', '5071acd9be7ffddea7ef40c4b56f5e28')
 
 # Database initialization
 def init_db():
@@ -78,7 +78,7 @@ def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         # Simple check - in production, use proper authentication
-        if not request.form.get('admin_key') == 'admin123' and not request.args.get('admin_key') == 'admin123':
+        if not request.form.get('admin_key') == 'DmyRhX-bygwF2h4pY9D_ZA' and not request.args.get('admin_key') == 'DmyRhX-bygwF2h4pY9D_ZA':
             return render_template('admin_login.html')
         return f(*args, **kwargs)
     return decorated_function
@@ -184,7 +184,7 @@ def admin_dashboard():
         conn.commit()
         conn.close()
         flash('Waterfall statuses updated successfully!')
-        return redirect(url_for('admin_dashboard', admin_key='admin123'))
+        return redirect(url_for('admin_dashboard', admin_key='DmyRhX-bygwF2h4pY9D_ZA'))
     
     # GET request - show the form
     conn = sqlite3.connect('waterfalls.db')
