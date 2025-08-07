@@ -202,6 +202,80 @@ def admin_dashboard():
     conn.close()
     return render_template('admin_dashboard.html', waterfalls=waterfalls, admin_key='wdvgtyhnvfr2019pkn')
 
+# Emergency Contacts Management Routes
+@app.route('/admin/emergency-contacts')
+@admin_required
+def admin_emergency_contacts():
+    conn = sqlite3.connect('waterfalls.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, name, department, phone_number FROM emergency_contacts ORDER BY name')
+    contacts = []
+    for row in cursor.fetchall():
+        contacts.append({
+            'id': row[0],
+            'name': row[1],
+            'department': row[2],
+            'phone_number': row[3]
+        })
+    conn.close()
+    return render_template('admin_emergency_contacts.html', contacts=contacts, admin_key='wdvgtyhnvfr2019pkn')
+
+@app.route('/admin/emergency-contacts/add', methods=['POST'])
+@admin_required
+def add_emergency_contact():
+    name = request.form.get('name')
+    department = request.form.get('department')
+    phone_number = request.form.get('phone_number')
+    
+    if name and department and phone_number:
+        conn = sqlite3.connect('waterfalls.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO emergency_contacts (name, department, phone_number)
+            VALUES (?, ?, ?)
+        ''', (name, department, phone_number))
+        conn.commit()
+        conn.close()
+        flash('Emergency contact added successfully!')
+    else:
+        flash('All fields are required!')
+    
+    return redirect(url_for('admin_emergency_contacts', admin_key='wdvgtyhnvfr2019pkn'))
+
+@app.route('/admin/emergency-contacts/edit/<int:contact_id>', methods=['POST'])
+@admin_required
+def edit_emergency_contact(contact_id):
+    name = request.form.get('name')
+    department = request.form.get('department')
+    phone_number = request.form.get('phone_number')
+    
+    if name and department and phone_number:
+        conn = sqlite3.connect('waterfalls.db')
+        cursor = conn.cursor()
+        cursor.execute('''
+            UPDATE emergency_contacts 
+            SET name = ?, department = ?, phone_number = ?
+            WHERE id = ?
+        ''', (name, department, phone_number, contact_id))
+        conn.commit()
+        conn.close()
+        flash('Emergency contact updated successfully!')
+    else:
+        flash('All fields are required!')
+    
+    return redirect(url_for('admin_emergency_contacts', admin_key='wdvgtyhnvfr2019pkn'))
+
+@app.route('/admin/emergency-contacts/delete/<int:contact_id>', methods=['POST'])
+@admin_required
+def delete_emergency_contact(contact_id):
+    conn = sqlite3.connect('waterfalls.db')
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM emergency_contacts WHERE id = ?', (contact_id,))
+    conn.commit()
+    conn.close()
+    flash('Emergency contact deleted successfully!')
+    return redirect(url_for('admin_emergency_contacts', admin_key='wdvgtyhnvfr2019pkn'))
+
 if __name__ == '__main__':
     # Handle command line arguments
     if len(sys.argv) > 1 and sys.argv[1] == '--init-db':
