@@ -56,7 +56,7 @@ waterfall-chatbot/
 
 4. **Set Environment Variables**
    - `PYTHON_VERSION`: `3.11.0`
-   - `SECRET_KEY`: Click "Generate" for a secure random key
+   - `SECRET_KEY`: Generate a secure random key
    - `RENDER`: `true`
 
 5. **Deploy**
@@ -78,7 +78,7 @@ waterfall-chatbot/
 
 ### Environment Variables
 - **PORT**: Set automatically by Render
-- **SECRET_KEY**: Generate a secure key in Render dashboard
+- **SECRET_KEY**: Generate a secure key
 - **PYTHON_VERSION**: 3.11.0 (recommended)
 - **RENDER**: Set to `true` to enable production mode
 
@@ -99,7 +99,7 @@ After successful deployment:
 
 1. **Main Chatbot Interface**: `https://your-app-name.onrender.com`
 2. **Admin Panel**: `https://your-app-name.onrender.com/admin`
-   - Admin Key: Contact administrator for access
+   - Admin Access: Contact administrator for credentials
 
 ### API Endpoints
 - `GET /api/waterfalls` - List all waterfalls
@@ -110,8 +110,8 @@ After successful deployment:
 ## 🔒 Security Considerations
 
 ### For Production Use:
-1. **Change Admin Key**: Update the admin authentication in `app.py`
-2. **Use Strong Secret Key**: Let Render generate a secure SECRET_KEY
+1. **Secure Authentication**: Update admin authentication system
+2. **Use Strong Security**: Configure secure keys and authentication
 3. **Environment Variables**: Store sensitive data in Render's environment variables
 4. **HTTPS**: Render provides HTTPS automatically
 
@@ -173,7 +173,7 @@ After successful deployment:
 
 2. **Test Admin Panel**
    - Go to `/admin`
-   - Login with the admin key
+   - Login with admin credentials
    - Update waterfall statuses
    - Verify changes appear in chatbot
 

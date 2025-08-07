@@ -73,7 +73,7 @@ A modern chatbot system built with Flask (Python) backend and JavaScript fronten
 ### For Administrators (Admin Panel)
 
 1. **Access Admin Panel**: Go to `http://localhost:5000/admin`
-2. **Login**: Use the configured admin key
+2. **Login**: Contact administrator for access credentials
 3. **Update Statuses**: 
    - Check/uncheck "Open for visitors" for each waterfall
    - Check/uncheck "Bathing allowed" for each waterfall
@@ -139,8 +139,8 @@ CREATE TABLE emergency_contacts (
 ## 🔒 Security Notes
 
 ### For Production Deployment:
-1. **Change Secret Key**: Update `app.secret_key` in `app.py`
-2. **Improve Authentication**: Replace simple admin key with proper user authentication
+1. **Enhance Security**: Update authentication and security configurations
+2. **Improve Authentication**: Implement proper user authentication system
 3. **Use Environment Variables**: Store sensitive data in environment variables
 4. **Enable HTTPS**: Use SSL certificates for secure communication
 5. **Database Security**: Consider using PostgreSQL or MySQL for production

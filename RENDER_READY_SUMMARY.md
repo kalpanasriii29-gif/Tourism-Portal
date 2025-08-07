@@ -40,7 +40,7 @@ waterfall-chatbot/
 - **Python Version**: 3.11.0
 
 ### Environment Variables
-- `SECRET_KEY`: Generate secure key in Render
+- Security keys: Configure in deployment environment
 - `RENDER`: `true` (enables production mode)
 - `PORT`: Auto-set by Render
 
@@ -91,7 +91,7 @@ waterfall-chatbot/
 
 - ✅ Environment-based configuration
 - ✅ Production/development mode detection
-- ✅ Secure secret key management
+- ✅ Secure key management
 - ✅ HTTPS ready (Render provides automatically)
 - ✅ Input validation and error handling
 

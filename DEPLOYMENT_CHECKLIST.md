@@ -13,7 +13,7 @@
 - [ ] Start Command: `gunicorn --bind 0.0.0.0:$PORT app:app`
 - [ ] Environment variables set:
   - [ ] `PYTHON_VERSION`: `3.11.0`
-  - [ ] `SECRET_KEY`: Generated secure key
+  - [ ] Security keys configured
   - [ ] `RENDER`: `true`
 
 ## Post-Deployment Testing
@@ -25,7 +25,7 @@
 - [ ] Emergency contacts display
 - [ ] Weather alerts work
 - [ ] Admin panel accessible: `/admin`
-- [ ] Admin login works with secure admin key
+- [ ] Admin login works with secure credentials
 - [ ] Admin can update waterfall statuses
 - [ ] Changes reflect in chatbot immediately
 
@@ -36,7 +36,7 @@
 - [ ] `GET /api/waterfall/1` returns specific waterfall
 
 ## Production Considerations
-- [ ] Secure admin key is configured in application
+- [ ] Secure authentication is configured in application
 - [ ] Consider upgrading to paid plan for always-on service
 - [ ] Set up custom domain (if needed)
 - [ ] Monitor application logs regularly
