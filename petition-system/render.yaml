@@ -1,0 +1,48 @@
+services:
+  # Backend API Service
+  - type: web
+    name: tenkasi-petition-api
+    env: node
+    region: singapore
+    plan: starter
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: petition-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: OFFICIAL_LOGIN_CODE
+        value: tgbvfrertyu4820
+      - key: ADMIN_LOGIN_CODE
+        value: nbcfeodkms934
+      - key: FRONTEND_URL
+        value: https://tenkasi-petition-frontend.onrender.com
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 900000
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: 100
+
+  # Frontend Static Site
+  - type: static
+    name: tenkasi-petition-frontend
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/build
+    envVars:
+      - key: REACT_APP_API_URL
+        value: https://tenkasi-petition-api.onrender.com/api
+
+databases:
+  # PostgreSQL Database
+  - name: petition-db
+    databaseName: petition_system
+    user: petition_user
+    plan: starter
