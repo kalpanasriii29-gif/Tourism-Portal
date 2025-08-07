@@ -99,7 +99,7 @@ After successful deployment:
 
 1. **Main Chatbot Interface**: `https://your-app-name.onrender.com`
 2. **Admin Panel**: `https://your-app-name.onrender.com/admin`
-   - Admin Key: `admin123`
+   - Admin Key: Set via ADMIN_KEY environment variable
 
 ### API Endpoints
 - `GET /api/waterfalls` - List all waterfalls
@@ -173,7 +173,7 @@ After successful deployment:
 
 2. **Test Admin Panel**
    - Go to `/admin`
-   - Login with `admin123`
+   - Login with your configured admin key
    - Update waterfall statuses
    - Verify changes appear in chatbot
 

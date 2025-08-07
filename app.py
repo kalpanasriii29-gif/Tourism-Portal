@@ -77,8 +77,9 @@ def init_db():
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        # Simple check - in production, use proper authentication
-        if not request.form.get('admin_key') == 'admin123' and not request.args.get('admin_key') == 'admin123':
+        # Get admin key from environment variable
+        admin_key = os.environ.get('ADMIN_KEY', 'admin123')  # fallback for development
+        if not request.form.get('admin_key') == admin_key and not request.args.get('admin_key') == admin_key:
             return render_template('admin_login.html')
         return f(*args, **kwargs)
     return decorated_function
@@ -184,7 +185,8 @@ def admin_dashboard():
         conn.commit()
         conn.close()
         flash('Waterfall statuses updated successfully!')
-        return redirect(url_for('admin_dashboard', admin_key='admin123'))
+        admin_key = os.environ.get('ADMIN_KEY', 'admin123')  # fallback for development
+        return redirect(url_for('admin_dashboard', admin_key=admin_key))
     
     # GET request - show the form
     conn = sqlite3.connect('waterfalls.db')
@@ -200,7 +202,8 @@ def admin_dashboard():
             'last_updated': row[4]
         })
     conn.close()
-    return render_template('admin_dashboard.html', waterfalls=waterfalls)
+    admin_key = os.environ.get('ADMIN_KEY', 'admin123')  # fallback for development
+    return render_template('admin_dashboard.html', waterfalls=waterfalls, admin_key=admin_key)
 
 if __name__ == '__main__':
     # Handle command line arguments
