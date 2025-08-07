@@ -184,8 +184,7 @@ def admin_dashboard():
         conn.commit()
         conn.close()
         flash('Waterfall statuses updated successfully!')
-        return redirect(url_for('admin_dashboard', admin_key='Qe7v8Mxs_Hf9Vg2L8pN3Tw
-'))
+        return redirect(url_for('admin_dashboard', admin_key='Qe7v8Mxs_Hf9Vg2L8pN3Tw'))
     
     # GET request - show the form
     conn = sqlite3.connect('waterfalls.db')
