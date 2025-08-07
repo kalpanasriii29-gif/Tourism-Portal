@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waterfall Information Chatbot</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .chat-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .chat-header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .chat-header p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .chat-body {
+            height: 500px;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #f8f9fa;
+        }
+        
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .message.bot {
+            justify-content: flex-start;
+        }
+        
+        .message.user {
+            justify-content: flex-end;
+        }
+        
+        .message-content {
+            max-width: 70%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        
+        .message.bot .message-content {
+            background: #e3f2fd;
+            color: #1976d2;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .message.user .message-content {
+            background: #4CAF50;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin: 0 0.5rem;
+        }
+        
+        .message.bot .message-avatar {
+            background: #1976d2;
+            color: white;
+        }
+        
+        .message.user .message-avatar {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .menu-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .menu-option {
+            background: #fff;
+            border: 2px solid #4CAF50;
+            color: #4CAF50;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .menu-option:hover {
+            background: #4CAF50;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .waterfall-status {
+            background: #f8f9fa;
+            border-left: 4px solid #4CAF50;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+        }
+        
+        .status-open { color: #4CAF50; font-weight: bold; }
+        .status-closed { color: #f44336; font-weight: bold; }
+        .bathing-allowed { color: #2196F3; font-weight: bold; }
+        .bathing-not-allowed { color: #ff9800; font-weight: bold; }
+        
+        .contact-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .contact-name { font-weight: bold; color: #333; }
+        .contact-dept { color: #666; font-size: 0.9rem; }
+        .contact-phone { color: #4CAF50; font-weight: bold; }
+        
+        .weather-alert {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .back-button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .back-button:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1><i class="fas fa-water"></i> Waterfall Information Bot</h1>
+                <p>Get real-time information about waterfalls, emergency contacts, and weather alerts</p>
+            </div>
+            <div class="chat-body" id="chatBody">
+                <div class="message bot">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        Welcome! I can help you with information about waterfalls. Please select an option:
+                        <div class="menu-options" id="mainMenu">
+                            <div class="menu-option" onclick="showWaterfallsMenu()">
+                                <i class="fas fa-water"></i> 1. Waterfalls Status
+                            </div>
+                            <div class="menu-option" onclick="showEmergencyContacts()">
+                                <i class="fas fa-phone"></i> 2. Emergency Contacts
+                            </div>
+                            <div class="menu-option" onclick="showWeatherAlerts()">
+                                <i class="fas fa-cloud-sun"></i> 3. Others (Weather Alerts)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const chatBody = document.getElementById('chatBody');
+
+        function scrollToBottom() {
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function addMessage(content, isUser = false) {
+            const message = document.createElement('div');
+            message.className = `message ${isUser ? 'user' : 'bot'}`;
+            
+            message.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-${isUser ? 'user' : 'robot'}"></i>
+                </div>
+                <div class="message-content">
+                    ${content}
+                </div>
+            `;
+            
+            chatBody.appendChild(message);
+            scrollToBottom();
+        }
+
+        function addUserMessage(text) {
+            addMessage(text, true);
+        }
+
+        function showMainMenu() {
+            const content = `
+                Welcome back! Please select an option:
+                <div class="menu-options">
+                    <div class="menu-option" onclick="showWaterfallsMenu()">
+                        <i class="fas fa-water"></i> 1. Waterfalls Status
+                    </div>
+                    <div class="menu-option" onclick="showEmergencyContacts()">
+                        <i class="fas fa-phone"></i> 2. Emergency Contacts
+                    </div>
+                    <div class="menu-option" onclick="showWeatherAlerts()">
+                        <i class="fas fa-cloud-sun"></i> 3. Others (Weather Alerts)
+                    </div>
+                </div>
+            `;
+            addMessage(content);
+        }
+
+        async function showWaterfallsMenu() {
+            addUserMessage('1. Waterfalls Status');
+            
+            try {
+                const response = await fetch('/api/waterfalls');
+                const waterfalls = await response.json();
+                
+                let content = `
+                    Here are the available waterfalls. Click on any waterfall to check its current status:
+                    <div class="menu-options">
+                `;
+                
+                waterfalls.forEach((waterfall, index) => {
+                    content += `
+                        <div class="menu-option" onclick="showWaterfallStatus(${waterfall.id})">
+                            <i class="fas fa-mountain"></i> ${index + 1}. ${waterfall.name}
+                        </div>
+                    `;
+                });
+                
+                content += `
+                    </div>
+                    <button class="back-button" onclick="showMainMenu()">
+                        <i class="fas fa-arrow-left"></i> Back to Main Menu
+                    </button>
+                `;
+                
+                addMessage(content);
+            } catch (error) {
+                addMessage('Sorry, I couldn\'t fetch the waterfalls list. Please try again later.');
+            }
+        }
+
+        async function showWaterfallStatus(waterfallId) {
+            // Show loading message
+            addMessage('<div class="loading"></div> Fetching waterfall status...');
+            
+            try {
+                const response = await fetch(`/api/waterfall/${waterfallId}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const statusClass = data.status === 'Open' ? 'status-open' : 'status-closed';
+                    const bathingClass = data.bathing === 'Allowed' ? 'bathing-allowed' : 'bathing-not-allowed';
+                    
+                    const content = `
+                        <div class="waterfall-status">
+                            <h5><i class="fas fa-mountain"></i> ${data.name}</h5>
+                            <p><strong>Status:</strong> <span class="${statusClass}">${data.status}</span></p>
+                            <p><strong>Bathing:</strong> <span class="${bathingClass}">${data.bathing}</span></p>
+                            <p><small><em>Last updated: ${new Date(data.last_updated).toLocaleString()}</em></small></p>
+                        </div>
+                        <button class="back-button" onclick="showWaterfallsMenu()">
+                            <i class="fas fa-arrow-left"></i> Back to Waterfalls
+                        </button>
+                        <button class="back-button" onclick="showMainMenu()">
+                            <i class="fas fa-home"></i> Main Menu
+                        </button>
+                    `;
+                    
+                    addMessage(content);
+                } else {
+                    addMessage('Sorry, I couldn\'t find information about that waterfall.');
+                }
+            } catch (error) {
+                addMessage('Sorry, there was an error fetching the waterfall status. Please try again.');
+            }
+        }
+
+        async function showEmergencyContacts() {
+            addUserMessage('2. Emergency Contacts');
+            addMessage('<div class="loading"></div> Loading emergency contacts...');
+            
+            try {
+                const response = await fetch('/api/emergency-contacts');
+                const contacts = await response.json();
+                
+                let content = `
+                    <strong><i class="fas fa-phone"></i> Emergency Contacts:</strong>
+                    <div style="margin-top: 1rem;">
+                `;
+                
+                contacts.forEach(contact => {
+                    content += `
+                        <div class="contact-card">
+                            <div class="contact-name">${contact.name}</div>
+                            <div class="contact-dept">${contact.department}</div>
+                            <div class="contact-phone">
+                                <i class="fas fa-phone"></i> 
+                                <a href="tel:${contact.phone}" style="color: #4CAF50; text-decoration: none;">
+                                    ${contact.phone}
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                content += `
+                    </div>
+                    <button class="back-button" onclick="showMainMenu()">
+                        <i class="fas fa-arrow-left"></i> Back to Main Menu
+                    </button>
+                `;
+                
+                addMessage(content);
+            } catch (error) {
+                addMessage('Sorry, I couldn\'t fetch the emergency contacts. Please try again later.');
+            }
+        }
+
+        async function showWeatherAlerts() {
+            addUserMessage('3. Others (Weather Alerts)');
+            addMessage('<div class="loading"></div> Fetching weather information...');
+            
+            try {
+                const response = await fetch('/api/weather-alerts');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const content = `
+                        <div class="weather-alert">
+                            <h5><i class="fas fa-cloud-sun"></i> Current Weather - ${data.location}</h5>
+                            <p style="font-size: 1.1rem; margin: 0.5rem 0;">${data.weather}</p>
+                            <p><small><em>Updated: ${new Date(data.timestamp).toLocaleString()}</em></small></p>
+                        </div>
+                        <button class="back-button" onclick="showMainMenu()">
+                            <i class="fas fa-arrow-left"></i> Back to Main Menu
+                        </button>
+                    `;
+                    addMessage(content);
+                } else {
+                    addMessage(`
+                        <div style="background: #ffebee; color: #c62828; padding: 1rem; border-radius: 8px;">
+                            <i class="fas fa-exclamation-triangle"></i> Weather service is currently unavailable. Please try again later.
+                        </div>
+                        <button class="back-button" onclick="showMainMenu()">
+                            <i class="fas fa-arrow-left"></i> Back to Main Menu
+                        </button>
+                    `);
+                }
+            } catch (error) {
+                addMessage('Sorry, there was an error fetching weather information. Please try again.');
+            }
+        }
+
+        // Initialize
+        scrollToBottom();
+    </script>
+</body>
+</html>
