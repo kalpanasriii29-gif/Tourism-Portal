@@ -73,7 +73,7 @@ A modern chatbot system built with Flask (Python) backend and JavaScript fronten
 ### For Administrators (Admin Panel)
 
 1. **Access Admin Panel**: Go to `http://localhost:5000/admin`
-2. **Login**: Use the admin key configured in your environment variables
+2. **Login**: Use the configured admin key
 3. **Update Statuses**: 
    - Check/uncheck "Open for visitors" for each waterfall
    - Check/uncheck "Bathing allowed" for each waterfall

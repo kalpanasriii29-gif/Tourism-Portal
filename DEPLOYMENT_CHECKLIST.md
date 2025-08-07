@@ -25,7 +25,7 @@
 - [ ] Emergency contacts display
 - [ ] Weather alerts work
 - [ ] Admin panel accessible: `/admin`
-- [ ] Admin login works (key: configured via ADMIN_KEY environment variable)
+- [ ] Admin login works with secure admin key
 - [ ] Admin can update waterfall statuses
 - [ ] Changes reflect in chatbot immediately
 
@@ -36,7 +36,7 @@
 - [ ] `GET /api/waterfall/1` returns specific waterfall
 
 ## Production Considerations
-- [ ] Set secure admin key via ADMIN_KEY environment variable
+- [ ] Secure admin key is configured in application
 - [ ] Consider upgrading to paid plan for always-on service
 - [ ] Set up custom domain (if needed)
 - [ ] Monitor application logs regularly
